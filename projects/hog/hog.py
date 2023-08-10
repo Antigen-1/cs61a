@@ -379,17 +379,17 @@ def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
 
     *** YOUR DESCRIPTION HERE ***
-    Optimize `hog_pile_strategy`
+    Optimize `hog_pile_strategy`, with `picky_piggy_strategy` removed.
     """
     # BEGIN PROBLEM 12
     if score > opponent_score:
-        return picky_piggy_strategy(score, opponent_score)
+        return 6
     elif score + picky_piggy(opponent_score) == opponent_score:
         return 0
     elif opponent_score - score == 1:
         return 10
     else:
-        return picky_piggy_strategy(score, opponent_score)
+        return 6
     # END PROBLEM 12
 
 ##########################

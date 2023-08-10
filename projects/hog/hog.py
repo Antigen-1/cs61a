@@ -282,6 +282,13 @@ def make_averaged(original_function, trials_count=1000):
     """
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    def wrapped(*args):
+        total, number = 0, 0
+        while number < trials_count:
+            total += original_function(*args)
+            number += 1
+        return total / trials_count
+    return wrapped
     # END PROBLEM 8
 
 
@@ -296,6 +303,17 @@ def max_scoring_num_rolls(dice=six_sided, trials_count=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    maximum = 0
+    highest = 0
+    current = 0
+    tested = make_averaged(roll_dice, trials_count)
+    while current < 10:
+        current += 1
+        result = tested(current, dice)
+        if result > maximum:
+            highest = current
+            maximum = result
+    return highest
     # END PROBLEM 9
 
 
@@ -336,7 +354,11 @@ def picky_piggy_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     returns NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    return 6  # Remove this line once implemented.
+    result = picky_piggy(opponent_score)
+    if result >= cutoff:
+        return 0
+    else:
+        return num_rolls
     # END PROBLEM 10
 
 
@@ -346,7 +368,10 @@ def hog_pile_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     Otherwise, it returns NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    return 6  # Remove this line once implemented.
+    if score + picky_piggy(opponent_score) == opponent_score:
+        return 0
+    else:
+        return picky_piggy_strategy(score, opponent_score, cutoff=cutoff, num_rolls=num_rolls)
     # END PROBLEM 11
 
 
@@ -354,9 +379,15 @@ def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
 
     *** YOUR DESCRIPTION HERE ***
+    This strategy returns 0 or 1 when the player is in lead. Otherwise it is the same as `hog_pile_strategy`.
     """
     # BEGIN PROBLEM 12
-    return 6  # Remove this line once implemented.
+    if score > opponent_score and picky_piggy(opponent_score) >= 5:
+        return 0
+    elif score > opponent_score:
+        return 1
+    else:
+        return hog_pile_strategy(score, opponent_score, cutoff=5, num_rolls=6)
     # END PROBLEM 12
 
 ##########################

@@ -152,6 +152,10 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
         result0 = increment + curr_score
         result1 = hog_pile(result0, oppo_score) + result0
         set_score(result1)
+
+        s1, s2 = values()
+        say = say(s1, s2)
+
         who = next_player(who)
     score0, score1 = values()
     # END PROBLEM 5

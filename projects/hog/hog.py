@@ -345,7 +345,7 @@ def run_experiments():
     #print('always_roll(8) win rate:', average_win_rate(always_roll(8)))
     #print('picky_piggy_strategy win rate:', average_win_rate(picky_piggy_strategy))
     print('hog_pile_strategy win rate:', average_win_rate(hog_pile_strategy))
-    #print('final_strategy win rate:', average_win_rate(final_strategy))
+    print('final_strategy win rate:', average_win_rate(final_strategy))
     "*** You may add additional experiments as you wish ***"
 
 

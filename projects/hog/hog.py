@@ -128,37 +128,27 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
-    def dispatch(first, second):
-        local_first = first
-        local_second = second
+    def dispatch(*choices):
+        assert len(choices) == 2, "Only two arguments are allowed"
+        choices_list = list(choices)
         def accessor():
-            if who == 0:
-                return local_first
-            else:
-                return local_second
+            return choices_list[who]
+        def opponent_accessor():
+            return choices_list[next_player(who)]
         def mutator(v):
-            nonlocal local_first, local_second
-            if who == 0:
-                local_first = v
-            else:
-                local_second = v
-        return accessor, mutator
+            choices_list[who] = v
+        def values():
+            return choices_list[0], choices_list[1]
+        return accessor, opponent_accessor, mutator, values
 
-    score, set_score = dispatch(score0, score1)
-    strategy, _ = dispatch(strategy0, strategy1)
-    opponent_score, set_opponent_score = dispatch(score1, score0)
+    score, opponent_score, set_score, values = dispatch(score0, score1)
+    strategy, _, _, _ = dispatch(strategy0, strategy1)
 
     def next(v):
         nonlocal who
 
         set_score(v)
         who = next_player(who)
-        set_opponent_score(v)
-    def values():
-        if who == 0:
-            return score(), opponent_score()
-        else:
-            return opponent_score(), score()
 
     while score() < goal and opponent_score() < goal:
         oppo_score = opponent_score()

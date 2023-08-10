@@ -379,14 +379,17 @@ def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
 
     *** YOUR DESCRIPTION HERE ***
-    The `cutoff` argument is re-selected.
+    Optimize `hog_pile_strategy`
     """
     # BEGIN PROBLEM 12
-    if score < opponent_score:
-        cutoff=opponent_score - score
+    if score > opponent_score:
+        return picky_piggy_strategy(score, opponent_score)
+    elif score + picky_piggy(opponent_score) == opponent_score:
+        return 0
+    elif opponent_score - score == 1:
+        return 10
     else:
-        cutoff=5
-    return hog_pile_strategy(score, opponent_score, cutoff=cutoff, num_rolls=6)
+        return picky_piggy_strategy(score, opponent_score)
     # END PROBLEM 12
 
 ##########################

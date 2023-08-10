@@ -144,12 +144,6 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     score, opponent_score, set_score, values = dispatch(score0, score1)
     strategy, _, _, _ = dispatch(strategy0, strategy1)
 
-    def next(v):
-        nonlocal who
-
-        set_score(v)
-        who = next_player(who)
-
     while score() < goal and opponent_score() < goal:
         oppo_score = opponent_score()
         curr_score = score()
@@ -157,7 +151,8 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
         increment = take_turn(num_rolls, oppo_score, dice, goal)
         result0 = increment + curr_score
         result1 = hog_pile(result0, oppo_score) + result0
-        next(result1)
+        set_score(result1)
+        who = next_player(who)
     score0, score1 = values()
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)

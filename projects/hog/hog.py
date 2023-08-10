@@ -22,6 +22,15 @@ def roll_dice(num_rolls, dice=six_sided):
     assert num_rolls > 0, 'Must roll at least once.'
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
+    r, n = 0, 0
+    while n < num_rolls:
+        t = dice()
+        if r == 1 or t == 1:
+            r = 1
+        else:
+            r += t
+        n += 1
+    return r
     # END PROBLEM 1
 
 
@@ -32,6 +41,15 @@ def picky_piggy(score):
     """
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    if score == 0:
+        return 7
+    else:
+        q, r = 1, 3
+        while score > 1:
+            t = r * 10
+            q, r = t // 7, t % 7
+            score -= 1
+        return q
     # END PROBLEM 2
 
 
@@ -52,6 +70,10 @@ def take_turn(num_rolls, opponent_score, dice=six_sided, goal=GOAL_SCORE):
     assert opponent_score < goal, 'The game should be over.'
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    if num_rolls == 0:
+        return picky_piggy(opponent_score)
+    else:
+        return roll_dice(num_rolls, dice)
     # END PROBLEM 3
 
 
@@ -63,6 +85,10 @@ def hog_pile(player_score, opponent_score):
     """
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    if player_score == opponent_score:
+        return player_score
+    else:
+        return 0
     # END PROBLEM 4
 
 
@@ -102,6 +128,47 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    def dispatch(first, second):
+        local_first = first
+        local_second = second
+        def accessor():
+            if who == 0:
+                return local_first
+            else:
+                return local_second
+        def mutator(v):
+            nonlocal local_first, local_second
+            if who == 0:
+                local_first = v
+            else:
+                local_second = v
+        return accessor, mutator
+
+    score, set_score = dispatch(score0, score1)
+    strategy, _ = dispatch(strategy0, strategy1)
+    opponent_score, set_opponent_score = dispatch(score1, score0)
+
+    def next(v):
+        nonlocal who
+
+        set_score(v)
+        who = next_player(who)
+        set_opponent_score(v)
+    def values():
+        if who == 0:
+            return score(), opponent_score()
+        else:
+            return opponent_score(), score()
+
+    while score() < goal and opponent_score() < goal:
+        oppo_score = opponent_score()
+        curr_score = score()
+        num_rolls = strategy()(curr_score, oppo_score)
+        increment = take_turn(num_rolls, oppo_score, dice, goal)
+        result0 = increment + curr_score
+        result1 = hog_pile(result0, oppo_score) + result0
+        next(result1)
+    score0, score1 = values()
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6

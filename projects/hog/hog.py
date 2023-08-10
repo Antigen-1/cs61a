@@ -154,13 +154,8 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
         set_score(result1)
         say = say(*values())
         who = next_player(who)
-    score0, score1 = values()
-    # END PROBLEM 5
-    # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
-    # BEGIN PROBLEM 6
-    "*** YOUR CODE HERE ***"
     # END PROBLEM 6
-    return score0, score1
+    return values()
 
 
 #######################

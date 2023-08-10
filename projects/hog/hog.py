@@ -375,7 +375,7 @@ def hog_pile_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     # END PROBLEM 11
 
 
-def final_strategy(score, opponent_score):
+def final_strategy(score, opponent_score, num_rolls=6):
     """Write a brief description of your final strategy.
 
     *** YOUR DESCRIPTION HERE ***
@@ -383,13 +383,13 @@ def final_strategy(score, opponent_score):
     """
     # BEGIN PROBLEM 12
     if score > opponent_score:
-        return 6
+        return num_rolls
     elif score + picky_piggy(opponent_score) == opponent_score:
         return 0
     elif opponent_score - score == 1:
         return 10
     else:
-        return 6
+        return num_rolls
     # END PROBLEM 12
 
 ##########################

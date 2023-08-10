@@ -379,15 +379,14 @@ def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
 
     *** YOUR DESCRIPTION HERE ***
-    This strategy returns 0 or 1 when the player is in lead. Otherwise it is the same as `hog_pile_strategy`.
+    The `cutoff` argument is re-selected.
     """
     # BEGIN PROBLEM 12
-    if score > opponent_score and picky_piggy(opponent_score) >= 5:
-        return 0
-    elif score > opponent_score:
-        return 1
+    if score < opponent_score:
+        cutoff=opponent_score - score
     else:
-        return hog_pile_strategy(score, opponent_score, cutoff=5, num_rolls=6)
+        cutoff=5
+    return hog_pile_strategy(score, opponent_score, cutoff=cutoff, num_rolls=6)
     # END PROBLEM 12
 
 ##########################

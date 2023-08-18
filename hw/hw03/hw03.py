@@ -22,8 +22,12 @@ def num_eights(pos):
     ...       ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr'])
     True
     """
-    "*** YOUR CODE HERE ***"
-
+    if pos == 0:
+        return 0
+    elif pos % 10 == 8:
+        return 1 + num_eights(pos // 10)
+    else:
+        return num_eights(pos // 10)
 
 def pingpong(n):
     """Return the nth element of the ping-pong sequence.
@@ -58,8 +62,26 @@ def pingpong(n):
     ...       ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def another_state(o):
+        return 1 - o
+    def dispatch(o):
+        if o:
+            return decrement
+        else:
+            return increment
+    def increment(n):
+        return n + 1
+    def decrement(n):
+        return n - 1
+    def with_state(i, o):
+        if i == n:
+            return 1
+        elif num_eights(i) or i % 8 == 0:
+            return dispatch(another_state(o))(with_state(i + 1, another_state(o)))
+        else:
+            return dispatch(o)(with_state(i + 1, o))
 
+    return with_state(1, 0)
 
 def missing_digits(n):
     """Given a number a that is in sorted, non-decreasing order,
@@ -88,7 +110,20 @@ def missing_digits(n):
     >>> check(HW_SOURCE_FILE, 'missing_digits', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def split(n):
+        return n // 10, n % 10
+    def loop(f, s, n):
+        if f == 0:
+            return 0
+        elif f < 10 and f != s:
+            return n - f - 1
+        elif f < 10:
+            return n - f
+        else:
+            r, l = split(f)
+            return loop(r, l, n - 1 if l != s else n)
+    r, l = split(n)
+    return loop(r, l, l)
 
 
 def ascending_coin(coin):
@@ -144,7 +179,14 @@ def count_coins(change):
     >>> check(HW_SOURCE_FILE, 'count_coins', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def loop(n, m):
+        if n < 0:
+            return 0
+        elif n == 0 or n == 1 or m == 1:
+            return 1
+        else:
+            return loop(n - m, m) + loop(n, descending_coin(m))
+    return loop(change, 25)
 
 
 def print_move(origin, destination):
@@ -180,8 +222,13 @@ def move_stack(n, start, end):
     Move the top disk from rod 1 to rod 3
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
-    "*** YOUR CODE HERE ***"
-
+    if n == 1:
+        print_move(start, end)
+    else:
+        temp = 6 - start - end
+        move_stack(n - 1, start, temp)
+        print_move(start, end)
+        move_stack(n - 1, temp, end)
 
 from operator import sub, mul
 
@@ -197,4 +244,4 @@ def make_anonymous_factorial():
     ...     ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    return (lambda f: lambda x: f(f, x))(lambda f, n: 1 if n == 0 or n == 1 else mul(n, f(f, n - 1)))

@@ -19,7 +19,12 @@ def summation(n, term):
     True
     """
     assert n >= 1
-    "*** YOUR CODE HERE ***"
+    def loop(i, r):
+        if i > n:
+            return r
+        else:
+            return loop(i + 1, r + term(i))
+    return loop(1, 0)
 
 
 def pascal(row, column):
@@ -34,7 +39,12 @@ def pascal(row, column):
     >>> pascal(4, 2)     # Row 4 (1 4 6 4 1), Column 2
     6
     """
-    "*** YOUR CODE HERE ***"
+    if column > row:
+        return 0
+    elif column == 0:
+        return 1
+    else:
+        return pascal(row - 1, column -1) + pascal(row - 1, column)
 
 
 def paths(m, n):
@@ -50,7 +60,14 @@ def paths(m, n):
     >>> paths(1, 157)
     1
     """
-    "*** YOUR CODE HERE ***"
+    if m == 1 and n == 1:
+        return 1
+    elif m == 1:
+        return paths(m, n - 1)
+    elif n == 1:
+        return paths(m - 1, n)
+    else:
+        return paths(m - 1, n) + paths(m, n - 1)
 
 
 def couple(s, t):
@@ -66,7 +83,7 @@ def couple(s, t):
     [['c', 's'], [6, '1']]
     """
     assert len(s) == len(t)
-    "*** YOUR CODE HERE ***"
+    return [[s[i], t[i]] for i in range(len(s))]
 
 
 def coords(fn, seq, lower, upper):
@@ -76,8 +93,7 @@ def coords(fn, seq, lower, upper):
     >>> coords(fn, seq, 1, 9)
     [[-2, 4], [1, 1], [3, 9]]
     """
-    "*** YOUR CODE HERE ***"
-    return ______
+    return [[e, fn(e)] for e in seq if fn(e) <= upper and fn(e) >= lower]
 
 
 def riffle(deck):
@@ -89,5 +105,10 @@ def riffle(deck):
     >>> riffle(range(20))
     [0, 10, 1, 11, 2, 12, 3, 13, 4, 14, 5, 15, 6, 16, 7, 17, 8, 18, 9, 19]
     """
-    "*** YOUR CODE HERE ***"
-    return _______
+    length = len(deck)
+    result = []
+    def step(i):
+        result.append(deck[i])
+        result.append(deck[length // 2 + i])
+    [step(i) for i in range(length // 2)]
+    return result

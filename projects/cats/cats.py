@@ -148,7 +148,14 @@ def autocorrect(typed_word, valid_words, diff_function, limit):
     'testing'
     """
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    if typed_word in valid_words:
+        return typed_word
+    else:
+        t = min(valid_words, key=lambda w: diff_function(typed_word, w, limit))
+        if diff_function(t, typed_word, limit) > limit:
+            return typed_word
+        else:
+            return t
     # END PROBLEM 5
 
 
@@ -175,11 +182,22 @@ def feline_flips(start, goal, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    def loop(i, n):
+        if n > limit:
+            return n
+        elif i == len(start):
+            return n + len(goal) - i
+        elif i == len(goal):
+            return n + len(start) - i
+        elif start[i] == goal[i]:
+            return loop(i + 1, n)
+        else:
+            return loop(i + 1, n + 1)
+    return loop(0, 0)
     # END PROBLEM 6
 
 
-def minimum_mewtations(start, goal, limit):
+def minimum_mewtations(start, goal, limit, n=0):
     """A diff function that computes the edit distance from START to GOAL.
     This function takes in a string START, a string GOAL, and a number LIMIT.
 
@@ -196,31 +214,42 @@ def minimum_mewtations(start, goal, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-
-    if ______________:  # Fill in the condition
+    if n > limit:
+        return n
+    
+    elif (not start) or (not goal):  # Fill in the condition
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return n + abs(len(start) - len(goal))
         # END
-
-    elif ___________:  # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-
+        
     else:
-        add = ...  # Fill in these lines
-        remove = ...
-        substitute = ...
+        add = minimum_mewtations(start, goal[1:], limit, n + 1)  # Fill in these lines
+        remove = minimum_mewtations(start[1:], goal, limit, n + 1)
+        substitute = minimum_mewtations(start[1:], goal[1:], limit, n if start[0] == goal[0] else n + 1)
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return min(add, remove, substitute)
         # END
 
 
-def final_diff(start, goal, limit):
+def final_diff(start, goal, limit, n=0):
     """A diff function that takes in a string START, a string GOAL, and a number LIMIT.
     If you implement this function, it will be used."""
-    assert False, 'Remove this line to use your final_diff function.'
+    if n > limit:
+        return n
+    
+    elif (not start) or (not goal):  # Fill in the condition
+        # BEGIN
+        return n + abs(len(start) - len(goal))
+        # END
+        
+    else:
+        add = minimum_mewtations(start, goal[1:], limit, n + 1)  # Fill in these lines
+        remove = minimum_mewtations(start[1:], goal, limit, n + 1)
+        substitute = minimum_mewtations(start[1:], goal[1:], limit, n if start[0] == goal[0] else n + 1)
+        swap = minimum_mewtations(start[0] + start[2:] if start[1] == goal[0] else start[1] + start[0] + start[2:], goal[1:], limit, n + 1) if len(start) >= 2 else limit + 1
+        # BEGIN
+        return min(add, remove, substitute, swap)
+        # END
 
 
 FINAL_DIFF_LIMIT = 6  # REPLACE THIS WITH YOUR LIMIT

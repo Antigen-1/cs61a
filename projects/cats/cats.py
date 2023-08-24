@@ -284,7 +284,16 @@ def report_progress(sofar, prompt, user_id, upload):
     0.2
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    def func(ratio):
+        upload({'id':user_id, 'progress':ratio})
+        return ratio
+    sl, pl, n = len(sofar), len(prompt), 0
+    while n < sl and n < pl:
+        if sofar[n] != prompt[n]:
+            break
+        else:
+            n += 1
+    return func(n / pl)
     # END PROBLEM 8
 
 
@@ -306,7 +315,16 @@ def time_per_word(words, times_per_player):
     [[6, 3, 6, 2], [10, 6, 1, 2]]
     """
     # BEGIN PROBLEM 9
-    "*** YOUR CODE HERE ***"
+    def fold(pl, r=[]):
+        l = len(pl)
+        if l == 0:
+            return r
+        elif l == 1:
+            r.reverse()
+            return r
+        else:
+            return fold(pl[1:], [pl[1] - pl[0]] + r)
+    return match(words, [fold(pl) for pl in times_per_player])
     # END PROBLEM 9
 
 
@@ -328,7 +346,20 @@ def fastest_words(match):
     player_indices = range(len(get_times(match)))  # contains an *index* for each player
     word_indices = range(len(get_words(match)))    # contains an *index* for each word
     # BEGIN PROBLEM 10
-    "*** YOUR CODE HERE ***"
+    r = []
+    for w in word_indices:
+        m, pl = False, False
+        for p in player_indices:
+            if (not m and not pl) or m > time(match, p, w):
+                m, pl = time(match, p, w), p
+        r.append(pl)
+    def split(l, p):
+        r = []
+        for n in word_indices:
+            if l[n] == p:
+              r.append(word_at(match, n))
+        return r
+    return list(map(lambda p: split(r, p), player_indices))
     # END PROBLEM 10
 
 

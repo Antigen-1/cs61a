@@ -20,7 +20,19 @@ def gen_perms(seq):
     >>> sorted(gen_perms("ab"))
     [['a', 'b'], ['b', 'a']]
     """
-    "*** YOUR CODE HERE ***"
+    def insert(i, s, l):
+        for n in range(0, l):
+            yield list(s[0 : n]) + [i] + list(s[n : ])
+    
+    length = len(seq)
+    if length == 0:
+        yield []
+    elif length == 1:
+        yield list(seq)
+    else:
+        for s in gen_perms(seq[1:]):
+            for r in insert(seq[0], s, length):
+                yield r
 
 
 def path_yielder(t, value):
@@ -57,10 +69,11 @@ def path_yielder(t, value):
     >>> sorted(list(path_to_2))
     [[0, 2], [0, 2, 1, 2]]
     """
-    "*** YOUR CODE HERE ***"
-    for _______________ in _________________:
-        for _______________ in _________________:
-            "*** YOUR CODE HERE ***"
+    if value == label(t):
+        yield [label(t)]
+    for b in branches(t):
+        for s in path_yielder(b, value):
+            yield [label(t)] + s
 
 
 def preorder(t):
@@ -73,7 +86,7 @@ def preorder(t):
     >>> preorder(tree(2, [tree(4, [tree(6)])]))
     [2, 4, 6]
     """
-    "*** YOUR CODE HERE ***"
+    return [label(t)] + sum([preorder(b) for b in branches(t)], [])
 
 
 def generate_preorder(t):
@@ -87,7 +100,9 @@ def generate_preorder(t):
     >>> list(gen)
     [2, 3, 4, 5, 6, 7]
     """
-    "*** YOUR CODE HERE ***"
+    yield label[t]
+    for b in branches(t):
+        preorder(b)
 
 
 def remainders_generator(m):
@@ -105,9 +120,9 @@ def remainders_generator(m):
     ...     for _ in range(3):
     ...         print(next(gen))
     First 3 natural numbers with remainder 0 when divided by 4:
+    0
     4
     8
-    12
     First 3 natural numbers with remainder 1 when divided by 4:
     1
     5
@@ -121,7 +136,13 @@ def remainders_generator(m):
     7
     11
     """
-    "*** YOUR CODE HERE ***"
+    for r in range(0, m):
+        def func():
+            n = 0
+            while True:
+                yield n * m + r
+                n += 1
+        yield func()
 
 
 class Tree:
